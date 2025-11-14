@@ -1,11 +1,113 @@
-// List of muscle groups and exercises for demo purposes. Extend as needed.
+// List of muscle groups and exercises as requested.
 const GROUPS = {
-  'Chest': ['Chest Press', 'Incline Bench Press', 'Push-up', 'Dumbbell Fly'],
-  'Back': ['Pull-up', 'Deadlift', 'Row'],
-  'Legs': ['Squat', 'Leg Press', 'Lunges'],
-  'Shoulders': ['Overhead Press', 'Lateral Raise'],
-  'Arms': ['Bicep Curl', 'Triceps Extension'],
-  'Tricep': ['Tricep Pushdown', 'Triceps Extension', 'Close Grip Bench']
+  'Chest': [
+    'Bench Press',
+    'Incline Bench Press',
+    'Chest Fly',
+    'Push-up',
+    'Dumbbell Press',
+    'Cable Crossover',
+    'Dips',
+    'Machine Chest Press',
+    'Decline Bench Press',
+    'Wide Grip Push-up'
+  ],
+  'Triceps': [
+    'Triceps Pushdown',
+    'Skullcrusher',
+    'Overhead Triceps Extension',
+    'Dips',
+    'Close Grip Push-up',
+    'Rope Pushdown',
+    'Triceps Kickback',
+    'Bench Dip',
+    'Diamond Push-up',
+    'Reverse Grip Pushdown'
+  ],
+  'Biceps': [
+    'Bicep Curl',
+    'Hammer Curl',
+    'Preacher Curl',
+    'Concentration Curl',
+    'Cable Curl',
+    'Chin-up',
+    'Barbell Curl',
+    'Incline Dumbbell Curl',
+    'EZ Bar Curl',
+    'Zottman Curl'
+  ],
+  'Shoulders': [
+    'Overhead Press',
+    'Arnold Press',
+    'Lateral Raise',
+    'Front Raise',
+    'Rear Delt Fly',
+    'Upright Row',
+    'Face Pull',
+    'Dumbbell Shoulder Press',
+    'Seated Barbell Press',
+    'Push Press'
+  ],
+  'Abs': [
+    'Crunch',
+    'Plank',
+    'Hanging Leg Raise',
+    'Bicycle Crunch',
+    'Russian Twist',
+    'Mountain Climber',
+    'V-up',
+    'Ab Wheel Rollout',
+    'Flutter Kicks',
+    'Side Plank'
+  ],
+  'Back': [
+    'Pull-up',
+    'Lat Pulldown',
+    'Bent-over Row',
+    'Deadlift',
+    'T-Bar Row',
+    'Seated Cable Row',
+    'Single Arm Dumbbell Row',
+    'Inverted Row',
+    'Straight Arm Pulldown',
+    'Chin-up'
+  ],
+  'Quads': [
+    'Squat',
+    'Leg Press',
+    'Lunges',
+    'Leg Extension',
+    'Front Squat',
+    'Goblet Squat',
+    'Bulgarian Split Squat',
+    'Step-up',
+    'Smith Machine Squat',
+    'Sissy Squat'
+  ],
+  'Glutes': [
+    'Hip Thrust',
+    'Glute Bridge',
+    'Romanian Deadlift',
+    'Sumo Squat',
+    'Bulgarian Split Squat',
+    'Step-up',
+    'Cable Kickback',
+    'Clamshell',
+    'Donkey Kick',
+    'Frog Pump'
+  ],
+  'Hamstrings': [
+    'Romanian Deadlift',
+    'Leg Curl',
+    'Good Morning',
+    'Glute Ham Raise',
+    'Kettlebell Swing',
+    'Stiff Leg Deadlift',
+    'Single Leg Deadlift',
+    'Seated Leg Curl',
+    'Nordic Hamstring Curl',
+    'Lying Leg Curl'
+  ]
 };
 
 const muscleGroupsContainer = document.getElementById('muscle-groups');
