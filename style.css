@@ -73,16 +73,23 @@ th, td {
   border: 1px solid #eee;
   padding: 7px 5px;
   text-align: center;
-  min-width: 85px;           /* helps columns not shrink */
+  min-width: 42px; /* was 85px, now half! */
 }
-th {
-  background: #f0f8ff;
-}
+...
 @media (max-width: 800px) {
   .container {
     max-width: 100vw;
     padding: 8px;
     width: 100vw;
+  }
+  .muscle-group-header { flex-direction: column; align-items: flex-start; }
+  table, th, td { font-size: 13px; }
+  th, td { min-width: 33px; } /* even smaller on mobile! */
+}
+@media (max-width: 500px) {
+  th, td { min-width: 24px; font-size: 11px; padding: 4px 2px; }
+  .container { padding: 3px; }
+}th: 100vw;
   }
   .muscle-group-header { flex-direction: column; align-items: flex-start; }
   table, th, td { font-size: 13px; }
