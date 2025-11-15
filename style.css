@@ -5,35 +5,35 @@ body {
   padding: 0;
 }
 .container {
-  margin: 40px auto;
-  padding: 24px;
+  margin: 24px auto;
+  padding: 16px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   background: #fff;
-  /* Use 98vw but max 1100px for desktop, 100% for mobile */
   width: 98vw;
-  max-width: 1100px;
-  min-width: 320px;
+  max-width: 960px;
+  min-width: 280px;
   box-sizing: border-box;
-  /* Remove overflow-x here, table will manage it */
 }
 h1 {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   text-align: center;
+  font-size: 2em;
 }
 button, select, input[type="date"], input[type="number"], input[type="text"] {
   border-radius: 4px;
   padding: 4px 8px;
   border: 1px solid #ccc;
+  font-size: 1em;
 }
 .muscle-group-section {
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 .muscle-group-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 20px 0 8px 0;
+  margin: 18px 0 8px 0;
   gap: 12px;
 }
 .remove-group-btn {
@@ -45,11 +45,11 @@ button, select, input[type="date"], input[type="number"], input[type="text"] {
   cursor: pointer;
 }
 .add-row-btn {
-  margin-top: 10px;
+  margin: 8px 0 0 0;
   background: #27ae60;
   color: #fff;
   border: none;
-  padding: 6px 16px;
+  padding: 5px 14px;
   cursor: pointer;
 }
 .delete-row-btn {
@@ -59,42 +59,58 @@ button, select, input[type="date"], input[type="number"], input[type="text"] {
   padding: 2px 8px;
   cursor: pointer;
 }
-/* TABLE: Always stay inside the card horizontally. Scroll when too wide */
+
+/* TABLE: Always stay inside card, horizontal scroll if too wide */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 18px;
-  display: block;            /* make table block so scroll works */
-  overflow-x: auto;          /* add horizontal scroll */
+  margin-bottom: 14px;
+  display: block;
+  overflow-x: auto;
   box-sizing: border-box;
-  white-space: nowrap;       /* prevent cell wrapping */
+  white-space: nowrap;
+  background: #fff;
 }
 th, td {
   border: 1px solid #eee;
-  padding: 7px 5px;
+  padding: 5px 2px;
   text-align: center;
-  min-width: 42px; /* was 85px, now half! */
+  font-size: 0.98em;
+  /* For exercise/date columns */
 }
-...
-@media (max-width: 800px) {
+th {
+  background: #f0f8ff;
+  font-size: 0.97em;
+}
+th:not(:nth-child(2)):not(:nth-child(1)),
+td:not(:nth-child(2)):not(:nth-child(1)),
+th:not([colspan]),
+td:not([colspan]) {
+  min-width: 28px; /* REPS/Wt columns much smaller! */
+  width: 30px;
+}
+/* Date and Exercise slightly larger */
+th:nth-child(1), td:nth-child(1) { min-width: 55px; }
+th:nth-child(2), td:nth-child(2) { min-width: 80px; }
+
+/* Responsive/mobile: shrink container and table, tighter cells */
+@media (max-width: 600px) {
   .container {
     max-width: 100vw;
-    padding: 8px;
     width: 100vw;
+    padding: 4px;
+    border-radius: 0;
   }
+  h1 { font-size: 1.2em; margin-bottom: 8px; }
   .muscle-group-header { flex-direction: column; align-items: flex-start; }
-  table, th, td { font-size: 13px; }
-  th, td { min-width: 33px; } /* even smaller on mobile! */
+  table, th, td { font-size: 0.90em; }
+  th, td { min-width: 21px; padding: 3px 1px; }
+  th:nth-child(1), td:nth-child(1) { min-width: 35px; }
+  th:nth-child(2), td:nth-child(2) { min-width: 52px; }
 }
-@media (max-width: 500px) {
-  th, td { min-width: 24px; font-size: 11px; padding: 4px 2px; }
-  .container { padding: 3px; }
-}th: 100vw;
-  }
-  .muscle-group-header { flex-direction: column; align-items: flex-start; }
-  table, th, td { font-size: 13px; }
-}
-@media (max-width: 500px) {
-  th, td { min-width: 50px; font-size: 11px; padding: 4px 2px; }
-  .container { padding: 3px; }
+@media (max-width: 430px) {
+  .container { padding: 1px; }
+  th, td { min-width: 16px; font-size: 0.82em; }
+  th:nth-child(1), td:nth-child(1) { min-width: 26px; }
+  th:nth-child(2), td:nth-child(2) { min-width: 40px; }
 }
