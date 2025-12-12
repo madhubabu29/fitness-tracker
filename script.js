@@ -21,8 +21,8 @@ const GROUPS = {
     'Standing Rope Pushdown',
     'Triceps Kickback',
     'Bench Dip',
-    'Diamond Push-up',
-    'Reverse Grip Pushdown'
+    'Machine Tricep Extension',
+    'Overhead Standing Dumbell extension'
   ],
   'Biceps': [
     'Seated Bicep Curl',
