@@ -72,7 +72,7 @@ const GROUPS = {
     'Straight Arm Pulldown',
     'Chin-up'
   ],
-  'Quads': [
+  'Legs Anterior': [
     'Squat',
     'Leg Press',
     'Rear Foot Elevated Split Squats ',
@@ -84,29 +84,18 @@ const GROUPS = {
     'Smith Machine Squat',
     'Sissy Squat'
   ],
-  'Glutes': [
+  'Legs Posterior': [
     'Hip Thrust',
     'Glute Bridge',
-    'Romanian Deadlift',
+    'Barbell Hip Extension',
     'Hyper Extension',
-    'Bulgarian Split Squat',
-    'Step-up',
-    'Cable Kickback',
+    'Seated Calf Raises',
+    'Standing Calf Raises',
+    'Hip Adductor/Abductor'
     'Lying Leg Side Raises',
-    'Donkey Kick',
-    'Frog Pump'
-  ],
-  'Hamstrings': [
-    'Romanian Deadlift',
     'Leg Curl',
     'Walking Lunges',
-    'Good Morning',
-    'Glute Ham Raise',
-    'Kettlebell Swing',
-    'Stiff Leg Deadlift',
-    'Single Leg Deadlift',
     'Seated Leg Curl',
-    'Nordic Hamstring Curl',
     'Lying Leg Curl'
   ]
 };
