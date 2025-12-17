@@ -91,7 +91,7 @@ const GROUPS = {
     'Hyper Extension',
     'Seated Calf Raises',
     'Standing Calf Raises',
-    'Hip Adductor/Abductor'
+    'Hip Adductor/Abductor',
     'Lying Leg Side Raises',
     'Leg Curl',
     'Walking Lunges',
