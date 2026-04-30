@@ -9,8 +9,29 @@
 <body>
   <div class="container">
     <h1>Workout Logger</h1>
-    <button id="add-muscle-group">+ Add Muscle Group</button>
-    <div id="muscle-groups"></div>
+    
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button class="tab-btn active" data-week="week1">Week 1</button>
+      <button class="tab-btn" data-week="week2">Week 2</button>
+      <button class="tab-btn" data-week="week3">Week 3</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="week1" class="tab-content active">
+      <button id="add-muscle-group-week1">+ Add Muscle Group</button>
+      <div id="muscle-groups-week1" class="muscle-groups"></div>
+    </div>
+
+    <div id="week2" class="tab-content">
+      <button id="add-muscle-group-week2">+ Add Muscle Group</button>
+      <div id="muscle-groups-week2" class="muscle-groups"></div>
+    </div>
+
+    <div id="week3" class="tab-content">
+      <button id="add-muscle-group-week3">+ Add Muscle Group</button>
+      <div id="muscle-groups-week3" class="muscle-groups"></div>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
