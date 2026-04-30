@@ -319,5 +319,13 @@ addMuscleGroupButton.addEventListener('click', function() {
   render();
 });
 
-loadState();
-render();
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    loadState();
+    render();
+  });
+} else {
+  loadState();
+  render();
+}
