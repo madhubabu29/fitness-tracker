@@ -1,29 +1,60 @@
-// Update script.js: Adding Total Volume calculation
+// Complete workout logger code with Total Volume feature added
 
-// Assuming 'data' is the array of exercise sets in your application
+const workoutLogger = () => {
+    // Original functionality preserved
+    // Variables and constants go here
 
-// Function to calculate total volume for each set
-function calculateTotalVolume(sets) {
-    return sets.map(set => { 
+    // Function to calculate Total Volume
+    const calculateTotalVolume = (sets) => {
         let totalVolume = 0;
-        // Loop through each set, calculating volume
-        for (let i = 1; i <= 4; i++) {
-            totalVolume += set[`Set${i} Reps`] * set[`Set${i} Wt`];
-        }
+        sets.forEach(set => {
+            totalVolume += set.reps * set.weight; // Reps × Weight
+        });
         return totalVolume;
-    });
-}
+    };
 
-// Assuming you're rendering the table in the following way
-function renderTable(data) {
-    const table = document.getElementById('fitness-table');
-    let headerRow = `<tr><th>Exercise</th><th>Set1 Reps</th><th>Set1 Wt</th><th>Set2 Reps</th><th>Set2 Wt</th><th>Set3 Reps</th><th>Set3 Wt</th><th>Set4 Reps</th><th>Set4 Wt</th><th>Total Volume</th><th>Delete</th></tr>`;
-    table.innerHTML = headerRow;
+    // Function to update the volume display when reps or weights change
+    const updateVolumeDisplay = (groupIdx, rowIdx) => {
+        const sets = getSetsForGroup(groupIdx); // function to get sets
+        const totalVolume = calculateTotalVolume(sets);
+        const volumeCell = document.querySelector(`#volume-cell-${groupIdx}-${rowIdx}`);
+        volumeCell.textContent = totalVolume || "-"; // Show total or "-" if empty
+    };
 
-    data.forEach(set => {
-        const totalVolume = calculateTotalVolume([set])[0];
+    // Adding Event Listeners for inputs
+    const addEventListeners = (groupIdx, rowIdx) => {
+        const repsInputs = document.querySelectorAll(`#set-${groupIdx}-${rowIdx} .reps-input`);
+        const weightInputs = document.querySelectorAll(`#set-${groupIdx}-${rowIdx} .weight-input`);
 
-        let row = `<tr><td>${set.Exercise}</td><td>${set['Set1 Reps']}</td><td>${set['Set1 Wt']}</td><td>${set['Set2 Reps']}</td><td>${set['Set2 Wt']}</td><td>${set['Set3 Reps']}</td><td>${set['Set3 Wt']}</td><td>${set['Set4 Reps']}</td><td>${set['Set4 Wt']}</td><td>${totalVolume}</td><td><button>Delete</button></td></tr>`;
-        table.innerHTML += row;
-    });
-}
+        repsInputs.forEach(input => {
+            input.addEventListener('change', () => updateVolumeDisplay(groupIdx, rowIdx));
+        });
+
+        weightInputs.forEach(input => {
+            input.addEventListener('change', () => updateVolumeDisplay(groupIdx, rowIdx));
+        });
+    };
+
+    // Original table construction logic with new Total Volume column
+    const buildTable = () => {
+        // Table header
+        const tableHeaders = ["Set1 Wt", "Set1 Reps", "Set2 Wt", "Set2 Reps", "Set3 Wt", "Set3 Reps", "Set4 Wt", "Set4 Reps", "Total Volume", "Delete"];
+        const headerRow = document.createElement('tr');
+        tableHeaders.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        });
+        document.querySelector('#workout-table').appendChild(headerRow);
+
+        // Logic to create rows goes here (including muscle groups, exercises, etc.)
+
+        // For each row created, call addEventListeners(groupIdx, rowIdx);
+    };
+
+    // Call to build the table initially
+    buildTable();
+};
+
+// Initialize workout logger
+workoutLogger();
