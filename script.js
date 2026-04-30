@@ -1,4 +1,8 @@
 // List of muscle groups and exercises as requested.
+// Add this at the VERY START of script.js (before the GROUPS definition)
+if (!document.getElementById('muscle-groups') || !document.getElementById('add-muscle-group')) {
+  console.error('Required HTML elements not found. Make sure index.html has id="muscle-groups" and id="add-muscle-group"');
+}
 const GROUPS = {
   'Chest': [
     'Bench Press',
