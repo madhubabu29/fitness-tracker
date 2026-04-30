@@ -1,5 +1,3 @@
-// List of muscle groups and exercises as requested.
-
 const GROUPS = {
   'Chest': [
     'Bench Press',
@@ -103,12 +101,13 @@ const GROUPS = {
   ]
 };
 
-const muscleGroupsContainer = document.getElementById('muscle-groups');
-const addMuscleGroupButton = document.getElementById('add-muscle-group');
-
 let state = {
-  groups: []
+  week1: { groups: [] },
+  week2: { groups: [] },
+  week3: { groups: [] }
 };
+
+let currentWeek = 'week1';
 
 function saveState() {
   localStorage.setItem('workout-log', JSON.stringify(state));
@@ -116,11 +115,11 @@ function saveState() {
 
 function loadState() {
   const s = localStorage.getItem('workout-log');
-  state = s ? JSON.parse(s) : { groups: [] };
+  state = s ? JSON.parse(s) : { week1: { groups: [] }, week2: { groups: [] }, week3: { groups: [] } };
 }
 
 function todayDate() {
-  return new Date().toISOString().slice(0,10);
+  return new Date().toISOString().slice(0, 10);
 }
 
 function calculateTotalVolume(sets) {
@@ -133,19 +132,19 @@ function calculateTotalVolume(sets) {
   return total;
 }
 
-function createMuscleGroupSection(groupIdx, groupName, entries) {
+function createMuscleGroupSection(week, groupIdx, groupName, entries) {
   const section = document.createElement('div');
   section.className = 'muscle-group-section';
 
   const headerDiv = document.createElement('div');
   headerDiv.className = 'muscle-group-header';
   headerDiv.innerHTML = `<strong>Muscle Group:</strong>
-    <select data-group-idx="${groupIdx}">
+    <select data-week="${week}" data-group-idx="${groupIdx}">
       ${Object.keys(GROUPS).map(mg =>
-        `<option value="${mg}"${mg===groupName?' selected':''}>${mg}</option>`
+        `<option value="${mg}"${mg === groupName ? ' selected' : ''}>${mg}</option>`
       ).join('')}
     </select>
-    <button class="remove-group-btn" data-group-idx="${groupIdx}">Remove Group</button>`;
+    <button class="remove-group-btn" data-week="${week}" data-group-idx="${groupIdx}">Remove Group</button>`;
   section.appendChild(headerDiv);
 
   const table = document.createElement('table');
@@ -169,25 +168,25 @@ function createMuscleGroupSection(groupIdx, groupName, entries) {
     const tr = document.createElement('tr');
 
     const tdDate = document.createElement('td');
-    tdDate.innerHTML = `<input type="date" value="${ent.date}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="date-field" />`;
+    tdDate.innerHTML = `<input type="date" value="${ent.date}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="date-field" />`;
     tr.appendChild(tdDate);
 
     const tdEx = document.createElement('td');
-    tdEx.innerHTML = `<select data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="exercise-dropdown">
+    tdEx.innerHTML = `<select data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="exercise-dropdown">
       ${GROUPS[groupName].map(ex =>
-        `<option value="${ex}"${ex===ent.exercise?' selected':''}>${ex}</option>`
+        `<option value="${ex}"${ex === ent.exercise ? ' selected' : ''}>${ex}</option>`
       ).join('')}
     </select>`;
     tr.appendChild(tdEx);
 
-    for (let i=0;i<4;i++) {
+    for (let i = 0; i < 4; i++) {
       const reps = ent.sets[i]?.reps ?? '';
       const wt = ent.sets[i]?.wt ?? '';
       const tdReps = document.createElement('td');
-      tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
+      tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
       tr.appendChild(tdReps);
       const tdWt = document.createElement('td');
-      tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
+      tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
       tr.appendChild(tdWt);
     }
 
@@ -195,12 +194,13 @@ function createMuscleGroupSection(groupIdx, groupName, entries) {
     const tdVolume = document.createElement('td');
     tdVolume.className = 'total-volume-cell';
     tdVolume.textContent = totalVolume > 0 ? totalVolume.toFixed(2) : '-';
+    tdVolume.setAttribute('data-week', week);
     tdVolume.setAttribute('data-group-idx', groupIdx);
     tdVolume.setAttribute('data-row-idx', rowIdx);
     tr.appendChild(tdVolume);
 
     const tdDel = document.createElement('td');
-    tdDel.innerHTML = `<button class="delete-row-btn" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}">X</button>`;
+    tdDel.innerHTML = `<button class="delete-row-btn" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}">X</button>`;
     tr.appendChild(tdDel);
 
     tbody.appendChild(tr);
@@ -212,6 +212,7 @@ function createMuscleGroupSection(groupIdx, groupName, entries) {
   const addRowBtn = document.createElement('button');
   addRowBtn.className = 'add-row-btn';
   addRowBtn.textContent = '+ Add more';
+  addRowBtn.setAttribute('data-week', week);
   addRowBtn.setAttribute('data-group-idx', groupIdx);
   section.appendChild(addRowBtn);
 
@@ -219,104 +220,140 @@ function createMuscleGroupSection(groupIdx, groupName, entries) {
 }
 
 function render() {
-  muscleGroupsContainer.innerHTML = '';
-  state.groups.forEach((g, groupIdx) => {
-    const groupSection = createMuscleGroupSection(groupIdx, g.group, g.entries);
-    muscleGroupsContainer.appendChild(groupSection);
+  ['week1', 'week2', 'week3'].forEach(week => {
+    const container = document.getElementById(`muscle-groups-${week}`);
+    container.innerHTML = '';
+    state[week].groups.forEach((g, groupIdx) => {
+      const groupSection = createMuscleGroupSection(week, groupIdx, g.group, g.entries);
+      container.appendChild(groupSection);
+    });
   });
   saveState();
 }
 
-function updateVolumeDisplay(groupIdx, rowIdx) {
-  const volumeCell = document.querySelector(`[data-group-idx="${groupIdx}"][data-row-idx="${rowIdx}"].total-volume-cell`);
+function updateVolumeDisplay(week, groupIdx, rowIdx) {
+  const volumeCell = document.querySelector(`[data-week="${week}"][data-group-idx="${groupIdx}"][data-row-idx="${rowIdx}"].total-volume-cell`);
   if (volumeCell) {
-    const entry = state.groups[groupIdx].entries[rowIdx];
+    const entry = state[week].groups[groupIdx].entries[rowIdx];
     const totalVolume = calculateTotalVolume(entry.sets);
     volumeCell.textContent = totalVolume > 0 ? totalVolume.toFixed(2) : '-';
   }
 }
 
-muscleGroupsContainer.addEventListener('click', function(e) {
-  if (e.target.classList.contains('remove-group-btn')) {
+// Event delegation for all weeks
+document.addEventListener('click', function(e) {
+  const week = e.target.getAttribute('data-week');
+  
+  // Tab navigation
+  if (e.target.classList.contains('tab-btn')) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    e.target.classList.add('active');
+    document.getElementById(e.target.getAttribute('data-week')).classList.add('active');
+    currentWeek = e.target.getAttribute('data-week');
+  }
+
+  // Remove group
+  else if (e.target.classList.contains('remove-group-btn') && week) {
     const idx = +e.target.getAttribute('data-group-idx');
-    state.groups.splice(idx,1);
+    state[week].groups.splice(idx, 1);
     render();
   }
-  else if (e.target.classList.contains('delete-row-btn')) {
+
+  // Delete row
+  else if (e.target.classList.contains('delete-row-btn') && week) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
-    state.groups[gi].entries.splice(ri,1);
+    state[week].groups[gi].entries.splice(ri, 1);
     render();
   }
-  else if (e.target.classList.contains('add-row-btn')) {
+
+  // Add row
+  else if (e.target.classList.contains('add-row-btn') && week) {
     const idx = +e.target.getAttribute('data-group-idx');
-    const groupName = state.groups[idx].group;
-    state.groups[idx].entries.push({
+    const groupName = state[week].groups[idx].group;
+    state[week].groups[idx].entries.push({
       date: todayDate(),
       exercise: GROUPS[groupName][0],
-      sets: [{},{},{},{}]
+      sets: [{}, {}, {}, {}]
+    });
+    render();
+  }
+
+  // Add muscle group button
+  else if (e.target.id && e.target.id.startsWith('add-muscle-group-')) {
+    const week = e.target.id.replace('add-muscle-group-', '');
+    state[week].groups.push({
+      group: 'Chest',
+      entries: [
+        {
+          date: todayDate(),
+          exercise: GROUPS['Chest'][0],
+          sets: [{}, {}, {}, {}]
+        }
+      ]
     });
     render();
   }
 });
 
-muscleGroupsContainer.addEventListener('change', function(e) {
+// Change event delegation
+document.addEventListener('change', function(e) {
+  const week = e.target.getAttribute('data-week');
+  
+  if (!week) return;
+
+  // Muscle group changed
   if (e.target.tagName === 'SELECT' && !e.target.classList.contains('exercise-dropdown')) {
     const idx = +e.target.getAttribute('data-group-idx');
     const newGroup = e.target.value;
-    state.groups[idx].group = newGroup;
-    state.groups[idx].entries.forEach(entry => {
+    state[week].groups[idx].group = newGroup;
+    state[week].groups[idx].entries.forEach(entry => {
       if (!GROUPS[newGroup].includes(entry.exercise)) entry.exercise = GROUPS[newGroup][0];
     });
     render();
   }
+
+  // Exercise changed
   else if (e.target.classList.contains('exercise-dropdown')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
-    state.groups[gi].entries[ri].exercise = e.target.value;
+    state[week].groups[gi].entries[ri].exercise = e.target.value;
     saveState();
   }
+
+  // Date changed
   else if (e.target.classList.contains('date-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
-    state.groups[gi].entries[ri].date = e.target.value;
+    state[week].groups[gi].entries[ri].date = e.target.value;
     saveState();
   }
+
+  // Reps changed
   else if (e.target.classList.contains('reps-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     const si = +e.target.getAttribute('data-set');
-    state.groups[gi].entries[ri].sets[si] = state.groups[gi].entries[ri].sets[si] || {};
-    state.groups[gi].entries[ri].sets[si].reps = e.target.value;
-    updateVolumeDisplay(gi, ri);
+    state[week].groups[gi].entries[ri].sets[si] = state[week].groups[gi].entries[ri].sets[si] || {};
+    state[week].groups[gi].entries[ri].sets[si].reps = e.target.value;
+    updateVolumeDisplay(week, gi, ri);
     saveState();
   }
+
+  // Weight changed
   else if (e.target.classList.contains('wt-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     const si = +e.target.getAttribute('data-set');
-    state.groups[gi].entries[ri].sets[si] = state.groups[gi].entries[ri].sets[si] || {};
-    state.groups[gi].entries[ri].sets[si].wt = e.target.value;
-    updateVolumeDisplay(gi, ri);
+    state[week].groups[gi].entries[ri].sets[si] = state[week].groups[gi].entries[ri].sets[si] || {};
+    state[week].groups[gi].entries[ri].sets[si].wt = e.target.value;
+    updateVolumeDisplay(week, gi, ri);
     saveState();
   }
 });
 
-addMuscleGroupButton.addEventListener('click', function() {
-  state.groups.push({
-    group: 'Chest',
-    entries: [
-      {
-        date: todayDate(),
-        exercise: GROUPS['Chest'][0],
-        sets: [{},{},{},{}]
-      }
-    ]
-  });
-  render();
-});
-
-// Wait for DOM to be ready
+// Initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     loadState();
