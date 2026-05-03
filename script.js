@@ -185,7 +185,7 @@ function createMuscleGroupSection(week, groupIdx, groupName, entries) {
       const reps = ent.sets[i]?.reps ?? '';
       const wt = ent.sets[i]?.wt ?? '';
       const tdReps = document.createElement('td');
-tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
+tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;      
       tr.appendChild(tdReps);
       const tdWt = document.createElement('td');
       tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
