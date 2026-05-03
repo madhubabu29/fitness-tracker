@@ -184,12 +184,13 @@ function createMuscleGroupSection(week, groupIdx, groupName, entries) {
     for (let i = 0; i < 4; i++) {
       const reps = ent.sets[i]?.reps ?? '';
       const wt = ent.sets[i]?.wt ?? '';
-      const tdReps = document.createElement('td');
-tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;      
-      tr.appendChild(tdReps);
-      const tdWt = document.createElement('td');
-      tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
-      tr.appendChild(tdWt);
+// Line 187-193: Fix the template literal
+const tdReps = document.createElement('td');
+tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
+tr.appendChild(tdReps);
+const tdWt = document.createElement('td');
+tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
+tr.appendChild(tdWt);
     }
 
     const totalVolume = calculateTotalVolume(ent.sets);
