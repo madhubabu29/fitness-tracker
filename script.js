@@ -79,7 +79,7 @@ const GROUPS = {
     'Rear Foot Elevated Split Squats ',
     'Leg Extension',
     'Front Squat',
-    'Sissy Squat',
+    'Hack Squat',
     'Bulgarian Split Squat',
     'Step-up',
     'Smith Machine Squat',
@@ -87,6 +87,8 @@ const GROUPS = {
   ],
   'Legs Posterior': [
     'Hip Thrust',
+    'Squat',
+    'Leg Press'
     'Glute Bridge',
     'Barbell Hip Extension',
     'Hyper Extension',
