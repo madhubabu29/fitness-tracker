@@ -88,6 +88,7 @@ const GROUPS = {
   'Legs Posterior': [
     'Hip Thrust',
     'Squat',
+    'Romanian Deadlift',
     'Leg Press',
     'Glute Bridge',
     'Barbell Hip Extension',
