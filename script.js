@@ -171,10 +171,12 @@ function createMuscleGroupSection(week, groupIdx, groupName, entries) {
     const tr = document.createElement('tr');
 
     const tdDate = document.createElement('td');
+    tdDate.setAttribute('data-label', 'Date');
     tdDate.innerHTML = `<input type="date" value="${ent.date}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="date-field" />`;
     tr.appendChild(tdDate);
 
     const tdEx = document.createElement('td');
+    tdEx.setAttribute('data-label', 'Exercise');
     tdEx.innerHTML = `<select data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="exercise-dropdown">
       ${GROUPS[groupName].map(ex =>
         `<option value="${ex}"${ex === ent.exercise ? ' selected' : ''}>${ex}</option>`
@@ -185,13 +187,16 @@ function createMuscleGroupSection(week, groupIdx, groupName, entries) {
     for (let i = 0; i < 4; i++) {
       const reps = ent.sets[i]?.reps ?? '';
       const wt = ent.sets[i]?.wt ?? '';
-// Line 187-193: Fix the template literal
-const tdReps = document.createElement('td');
-tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
-tr.appendChild(tdReps);
-const tdWt = document.createElement('td');
-tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
-tr.appendChild(tdWt);
+      
+      const tdReps = document.createElement('td');
+      tdReps.setAttribute('data-label', `S${i+1} Reps`);
+      tdReps.innerHTML = `<input type="number" min="0" placeholder="Reps" value="${reps}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="reps-field" />`;
+      tr.appendChild(tdReps);
+
+      const tdWt = document.createElement('td');
+      tdWt.setAttribute('data-label', `S${i+1} Wt`);
+      tdWt.innerHTML = `<input type="text" placeholder="Wt" value="${wt}" data-set="${i}" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}" class="wt-field" />`;
+      tr.appendChild(tdWt);
     }
 
     const totalVolume = calculateTotalVolume(ent.sets);
@@ -204,6 +209,7 @@ tr.appendChild(tdWt);
     tr.appendChild(tdVolume);
 
     const tdDel = document.createElement('td');
+    tdDel.setAttribute('data-label', 'Delete');
     tdDel.innerHTML = `<button class="delete-row-btn" data-week="${week}" data-group-idx="${groupIdx}" data-row-idx="${rowIdx}">X</button>`;
     tr.appendChild(tdDel);
 
