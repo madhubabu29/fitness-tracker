@@ -356,37 +356,49 @@ select:focus {
 
   /* Horizontal Scroll for Table on Mobile */
   table {
-    font-size: 0.75em;
+    font-size: 0.8em;
     display: block;
     overflow-x: auto;
     border: 1px solid #bdc3c7;
+    width: 100%;
   }
 
   table thead {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+    display: none;
   }
 
   table tbody {
     display: block;
+    width: 100%;
   }
 
   table tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #bdc3c7;
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
   }
 
-  table th {
-    padding: 5px 3px;
-    font-size: 0.65em;
-    line-height: 1.2;
+  table tr:nth-child(odd) {
+    background-color: #f9f9f9;
   }
 
   table td {
-    padding: 5px 3px;
-    font-size: 0.7em;
+    display: block;
+    padding: 10px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #ecf0f1;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  table td:last-child {
+    border-bottom: none;
   }
 
   table td::before {
@@ -394,22 +406,48 @@ select:focus {
     display: block;
     font-weight: bold;
     color: #2c3e50;
-    font-size: 0.9em;
-    margin-bottom: 2px;
+    font-size: 0.95em;
+    margin-right: 10px;
+    min-width: 80px;
+    flex-shrink: 0;
   }
 
+  /* Date and Exercise cells - bigger and more readable */
+  table td:nth-child(1),
+  table td:nth-child(2) {
+    padding: 12px 10px;
+    min-height: 50px;
+  }
+
+  table td:nth-child(1)::before,
+  table td:nth-child(2)::before {
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  /* Input fields in mobile cells */
   input[type="date"],
   input[type="number"],
   input[type="text"],
   select {
-    width: 100%;
-    padding: 6px 4px;
-    font-size: 0.8em;
+    width: auto;
+    flex: 1;
+    padding: 8px;
+    font-size: 0.95em;
+    min-width: 100px;
+  }
+
+  /* Make Date input larger */
+  table td:nth-child(1) input[type="date"],
+  table td:nth-child(2) select {
+    font-size: 1em;
+    padding: 10px 8px;
   }
 
   .delete-row-btn {
-    padding: 6px 8px;
-    font-size: 0.8em;
+    width: 100%;
+    padding: 8px;
+    font-size: 0.85em;
   }
 
   .add-row-btn {
@@ -435,21 +473,23 @@ select:focus {
     font-size: 0.7em;
   }
 
-  table th {
-    font-size: 0.6em;
-    padding: 4px 2px;
+  table td {
+    padding: 8px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  table td {
-    padding: 4px 2px;
-    font-size: 0.65em;
+  table td::before {
+    margin-bottom: 4px;
+    margin-right: 0;
+    font-size: 0.9em;
   }
 
   input[type="date"],
   input[type="number"],
   input[type="text"],
   select {
-    padding: 5px 3px;
-    font-size: 0.75em;
+    font-size: 0.9em;
+    width: 100%;
   }
 }
