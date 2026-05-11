@@ -354,100 +354,78 @@ select:focus {
     font-size: 0.9em;
   }
 
-  /* Horizontal Scroll for Table on Mobile */
+  /* Horizontal Scroll for Table on Mobile - Keep table structure */
   table {
     font-size: 0.8em;
-    display: block;
-    overflow-x: auto;
+    display: table;
     border: 1px solid #bdc3c7;
-    width: 100%;
+    width: auto;
+    min-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Wrap table in overflow container */
+  .muscle-group-section > table {
+    display: table;
   }
 
   table thead {
-    display: none;
+    display: table-header-group;
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
   }
 
   table tbody {
-    display: block;
-    width: 100%;
+    display: table-row-group;
   }
 
   table tr {
-    display: block;
-    margin-bottom: 12px;
-    border: 1px solid #bdc3c7;
-    background-color: white;
-    border-radius: 4px;
-    overflow: hidden;
+    display: table-row;
   }
 
-  table tr:nth-child(odd) {
-    background-color: #f9f9f9;
+  table th {
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid #bdc3c7;
+    font-size: 0.75em;
+    background-color: #34495e;
+    color: white;
   }
 
   table td {
-    display: block;
-    padding: 10px;
-    text-align: left;
-    border: none;
-    border-bottom: 1px solid #ecf0f1;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: table-cell;
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid #bdc3c7;
+  }
+
+  table tbody tr:nth-child(odd) {
+    background-color: #ecf0f1;
+  }
+
+  table tbody tr:hover {
+    background-color: #d5dbdb;
   }
 
   table td:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #bdc3c7;
   }
 
-  table td::before {
-    content: attr(data-label);
-    display: block;
-    font-weight: bold;
-    color: #2c3e50;
-    font-size: 0.95em;
-    margin-right: 10px;
-    min-width: 80px;
-    flex-shrink: 0;
-  }
-
-  /* Date and Exercise cells - bigger and more readable */
-  table td:nth-child(1),
-  table td:nth-child(2) {
-    padding: 12px 10px;
-    min-height: 50px;
-  }
-
-  table td:nth-child(1)::before,
-  table td:nth-child(2)::before {
-    font-size: 1em;
-    font-weight: bold;
-  }
-
-  /* Input fields in mobile cells */
+  /* Input fields in mobile - keep compact */
   input[type="date"],
   input[type="number"],
   input[type="text"],
   select {
-    width: auto;
-    flex: 1;
-    padding: 8px;
-    font-size: 0.95em;
-    min-width: 100px;
-  }
-
-  /* Make Date input larger */
-  table td:nth-child(1) input[type="date"],
-  table td:nth-child(2) select {
-    font-size: 1em;
-    padding: 10px 8px;
+    width: 100%;
+    padding: 6px 4px;
+    font-size: 0.85em;
+    min-width: 60px;
   }
 
   .delete-row-btn {
-    width: 100%;
-    padding: 8px;
-    font-size: 0.85em;
+    padding: 6px 4px;
+    font-size: 0.75em;
   }
 
   .add-row-btn {
@@ -473,23 +451,29 @@ select:focus {
     font-size: 0.7em;
   }
 
-  table td {
-    padding: 8px;
-    flex-direction: column;
-    align-items: flex-start;
+  table {
+    font-size: 0.75em;
   }
 
-  table td::before {
-    margin-bottom: 4px;
-    margin-right: 0;
-    font-size: 0.9em;
+  table th {
+    padding: 6px 3px;
+    font-size: 0.65em;
+  }
+
+  table td {
+    padding: 6px 3px;
   }
 
   input[type="date"],
   input[type="number"],
   input[type="text"],
   select {
-    font-size: 0.9em;
-    width: 100%;
+    font-size: 0.8em;
+    padding: 4px 2px;
+  }
+
+  .delete-row-btn {
+    padding: 4px 2px;
+    font-size: 0.7em;
   }
 }
