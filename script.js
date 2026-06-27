@@ -111,6 +111,7 @@ let state = {
 };
 
 let currentWeek = 'week1';
+let weekCount = 3;
 
 function saveState() {
   localStorage.setItem('workout-log', JSON.stringify(state));
@@ -118,7 +119,14 @@ function saveState() {
 
 function loadState() {
   const s = localStorage.getItem('workout-log');
-  state = s ? JSON.parse(s) : { week1: { groups: [] }, week2: { groups: [] }, week3: { groups: [] } };
+  if (s) {
+    state = JSON.parse(s);
+    // Calculate weekCount from existing weeks
+    weekCount = Object.keys(state).filter(key => key.startsWith('week')).length;
+  } else {
+    state = { week1: { groups: [] }, week2: { groups: [] }, week3: { groups: [] } };
+    weekCount = 3;
+  }
 }
 
 function todayDate() {
@@ -229,15 +237,61 @@ function createMuscleGroupSection(week, groupIdx, groupName, entries) {
   return section;
 }
 
+function renderTabs() {
+  const tabsContainer = document.getElementById('tabs-container');
+  tabsContainer.innerHTML = '';
+  
+  for (let i = 1; i <= weekCount; i++) {
+    const weekKey = `week${i}`;
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (weekKey === currentWeek ? ' active' : '');
+    btn.textContent = `Week ${i}`;
+    btn.setAttribute('data-week', weekKey);
+    tabsContainer.appendChild(btn);
+  }
+}
+
+function renderContent() {
+  const tabsContent = document.getElementById('tabs-content');
+  tabsContent.innerHTML = '';
+  
+  for (let i = 1; i <= weekCount; i++) {
+    const weekKey = `week${i}`;
+    const div = document.createElement('div');
+    div.id = weekKey;
+    div.className = 'tab-content' + (weekKey === currentWeek ? ' active' : '');
+    
+    const btn = document.createElement('button');
+    btn.id = `add-muscle-group-${weekKey}`;
+    btn.textContent = '+ Add Muscle Group';
+    div.appendChild(btn);
+    
+    const muscleGroupsDiv = document.createElement('div');
+    muscleGroupsDiv.id = `muscle-groups-${weekKey}`;
+    muscleGroupsDiv.className = 'muscle-groups';
+    div.appendChild(muscleGroupsDiv);
+    
+    tabsContent.appendChild(div);
+  }
+}
+
 function render() {
-  ['week1', 'week2', 'week3'].forEach(week => {
-    const container = document.getElementById(`muscle-groups-${week}`);
-    container.innerHTML = '';
-    state[week].groups.forEach((g, groupIdx) => {
-      const groupSection = createMuscleGroupSection(week, groupIdx, g.group, g.entries);
-      container.appendChild(groupSection);
-    });
-  });
+  renderTabs();
+  renderContent();
+  
+  // Render muscle groups for each week
+  for (let i = 1; i <= weekCount; i++) {
+    const weekKey = `week${i}`;
+    const container = document.getElementById(`muscle-groups-${weekKey}`);
+    if (container && state[weekKey]) {
+      container.innerHTML = '';
+      state[weekKey].groups.forEach((g, groupIdx) => {
+        const groupSection = createMuscleGroupSection(weekKey, groupIdx, g.group, g.entries);
+        container.appendChild(groupSection);
+      });
+    }
+  }
+  
   saveState();
 }
 
@@ -254,32 +308,47 @@ function updateVolumeDisplay(week, groupIdx, rowIdx) {
 document.addEventListener('click', function(e) {
   const week = e.target.getAttribute('data-week');
   
+  // Add new week
+  if (e.target.id === 'add-week-btn') {
+    weekCount++;
+    const newWeekKey = `week${weekCount}`;
+    state[newWeekKey] = { groups: [] };
+    currentWeek = newWeekKey;
+    render();
+    return;
+  }
+  
   // Tab navigation
   if (e.target.classList.contains('tab-btn')) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
     e.target.classList.add('active');
-    document.getElementById(e.target.getAttribute('data-week')).classList.add('active');
-    currentWeek = e.target.getAttribute('data-week');
+    const weekKey = e.target.getAttribute('data-week');
+    const contentDiv = document.getElementById(weekKey);
+    if (contentDiv) contentDiv.classList.add('active');
+    currentWeek = weekKey;
+    return;
   }
 
   // Remove group
-  else if (e.target.classList.contains('remove-group-btn') && week) {
+  if (e.target.classList.contains('remove-group-btn') && week) {
     const idx = +e.target.getAttribute('data-group-idx');
     state[week].groups.splice(idx, 1);
     render();
+    return;
   }
 
   // Delete row
-  else if (e.target.classList.contains('delete-row-btn') && week) {
+  if (e.target.classList.contains('delete-row-btn') && week) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     state[week].groups[gi].entries.splice(ri, 1);
     render();
+    return;
   }
 
   // Add row
-  else if (e.target.classList.contains('add-row-btn') && week) {
+  if (e.target.classList.contains('add-row-btn') && week) {
     const idx = +e.target.getAttribute('data-group-idx');
     const groupName = state[week].groups[idx].group;
     state[week].groups[idx].entries.push({
@@ -288,10 +357,11 @@ document.addEventListener('click', function(e) {
       sets: [{}, {}, {}, {}]
     });
     render();
+    return;
   }
 
   // Add muscle group button
-  else if (e.target.id && e.target.id.startsWith('add-muscle-group-')) {
+  if (e.target.id && e.target.id.startsWith('add-muscle-group-')) {
     const week = e.target.id.replace('add-muscle-group-', '');
     state[week].groups.push({
       group: 'Chest',
@@ -304,6 +374,7 @@ document.addEventListener('click', function(e) {
       ]
     });
     render();
+    return;
   }
 });
 
@@ -322,26 +393,29 @@ document.addEventListener('change', function(e) {
       if (!GROUPS[newGroup].includes(entry.exercise)) entry.exercise = GROUPS[newGroup][0];
     });
     render();
+    return;
   }
 
   // Exercise changed
-  else if (e.target.classList.contains('exercise-dropdown')) {
+  if (e.target.classList.contains('exercise-dropdown')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     state[week].groups[gi].entries[ri].exercise = e.target.value;
     saveState();
+    return;
   }
 
   // Date changed
-  else if (e.target.classList.contains('date-field')) {
+  if (e.target.classList.contains('date-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     state[week].groups[gi].entries[ri].date = e.target.value;
     saveState();
+    return;
   }
 
   // Reps changed
-  else if (e.target.classList.contains('reps-field')) {
+  if (e.target.classList.contains('reps-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     const si = +e.target.getAttribute('data-set');
@@ -349,10 +423,11 @@ document.addEventListener('change', function(e) {
     state[week].groups[gi].entries[ri].sets[si].reps = e.target.value;
     updateVolumeDisplay(week, gi, ri);
     saveState();
+    return;
   }
 
   // Weight changed
-  else if (e.target.classList.contains('wt-field')) {
+  if (e.target.classList.contains('wt-field')) {
     const gi = +e.target.getAttribute('data-group-idx');
     const ri = +e.target.getAttribute('data-row-idx');
     const si = +e.target.getAttribute('data-set');
@@ -360,6 +435,7 @@ document.addEventListener('change', function(e) {
     state[week].groups[gi].entries[ri].sets[si].wt = e.target.value;
     updateVolumeDisplay(week, gi, ri);
     saveState();
+    return;
   }
 });
 
