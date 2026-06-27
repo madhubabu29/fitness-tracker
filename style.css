@@ -29,7 +29,14 @@ h1 {
   margin-bottom: 20px;
   border-bottom: 2px solid #ddd;
   overflow-x: auto;
-  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  flex: 1;
 }
 
 .tab-btn {
@@ -53,6 +60,30 @@ h1 {
   background: #3498db;
   color: #fff;
   border-bottom-color: #2980b9;
+}
+
+/* Add Week Button */
+.add-week-btn {
+  padding: 10px 12px;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.add-week-btn:hover {
+  background: #229954;
 }
 
 /* Tab Content */
@@ -79,9 +110,7 @@ h1 {
 }
 
 /* Add Muscle Group Button */
-#add-muscle-group-week1,
-#add-muscle-group-week2,
-#add-muscle-group-week3 {
+.tab-content > button {
   padding: 10px 15px;
   background: #27ae60;
   color: white;
@@ -94,9 +123,7 @@ h1 {
   transition: background 0.3s ease;
 }
 
-#add-muscle-group-week1:hover,
-#add-muscle-group-week2:hover,
-#add-muscle-group-week3:hover {
+.tab-content > button:hover {
   background: #229954;
 }
 
@@ -305,6 +332,12 @@ select:focus {
     font-size: 0.85em;
   }
 
+  .add-week-btn {
+    padding: 8px 10px;
+    width: 40px;
+    height: 40px;
+  }
+
   table {
     font-size: 0.8em;
   }
@@ -327,9 +360,7 @@ select:focus {
     font-size: 0.75em;
   }
 
-  #add-muscle-group-week1,
-  #add-muscle-group-week2,
-  #add-muscle-group-week3 {
+  .tab-content > button {
     padding: 8px 12px;
     font-size: 0.85em;
   }
@@ -359,9 +390,20 @@ select:focus {
     margin-bottom: 15px;
   }
 
+  .tabs-container {
+    gap: 5px;
+  }
+
   .tab-btn {
     padding: 6px 10px;
     font-size: 0.75em;
+  }
+
+  .add-week-btn {
+    padding: 6px 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1em;
   }
 
   .muscle-group-section {
@@ -389,9 +431,7 @@ select:focus {
     font-size: 0.8em;
   }
 
-  #add-muscle-group-week1,
-  #add-muscle-group-week2,
-  #add-muscle-group-week3 {
+  .tab-content > button {
     width: 100%;
     padding: 10px;
     font-size: 0.9em;
@@ -493,6 +533,13 @@ select:focus {
   .tab-btn {
     padding: 5px 8px;
     font-size: 0.7em;
+  }
+
+  .add-week-btn {
+    padding: 4px 6px;
+    width: 32px;
+    height: 32px;
+    font-size: 1em;
   }
 
   table {
